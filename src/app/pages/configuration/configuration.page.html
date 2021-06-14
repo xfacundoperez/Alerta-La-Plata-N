@@ -1,0 +1,60 @@
+<ion-header>
+  <div class="bar-color"></div>
+</ion-header>
+<ion-content slot="fixed">
+  <!-- Default Refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="refreshStatus($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-item (click)="appComponent.openMenu()">
+            <ion-icon name="list-outline" slot="start"></ion-icon>
+            <ion-label>Abrir menú</ion-label>
+          </ion-item>
+          <div *ngFor="let p of appComponent.appPages; let i = index">
+            <ion-item lines="none" detail="false" *ngIf="p.url == router.url">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card class="ion-card-flex"> 
+          <ion-card-header class="ion-card-header">
+            <div style="display: flex; justify-content: space-between;">
+              <ion-card-title>LOG de la aplicación</ion-card-title>
+              <ion-button (click)="limpiarLog()">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>            
+              <!-- <ion-checkbox [(ngModel)]="logger.status" (ionChange)="isLogChange()"></ion-checkbox> -->
+            </div>
+          </ion-card-header>
+          <ion-card-content style="background-color: black; color: green; max-height: 200px; overflow-y: auto;">
+            <div *ngIf="!logger.logs.length; else elseBlock">Sin Logs</div>
+            <ng-template #elseBlock>
+              <div *ngFor="let _log of logger.logs">
+                {{ _log }}<br><br>
+              </div>
+            </ng-template>
+          </ion-card-content>
+      </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-thumbnail slot="start" class="img_thumbnail">
+      <ion-img class="img_thumbail_img_footer" [src]="appComponent.imgs.footer"></ion-img>
+    </ion-thumbnail>
+    <ion-thumbnail slot="start" class="img_thumbnail" style="width: 50%;">
+      <ion-img class="img_thumbail_img_footer" [src]="appComponent.imgs.logo"></ion-img>
+    </ion-thumbnail>
+  </ion-toolbar>
+</ion-footer>

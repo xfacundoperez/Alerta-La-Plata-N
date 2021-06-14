@@ -1,5 +1,7 @@
 {
   "name": "AlertaCOMLaPlata",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

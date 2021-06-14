@@ -1,0 +1,46 @@
+<ion-header>
+  <div class="bar-color"></div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-item (click)="appComponent.openMenu()" style="--background: #7d2d9c; color: white">
+            <ion-icon name="list-outline" slot="start" color="ligth"></ion-icon>
+            <ion-label>Abrir menú</ion-label>
+          </ion-item>
+          <div *ngFor="let p of appComponent.appPages; let i = index">
+            <ion-item lines="none" detail="false" *ngIf="p.url == router.url">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content slot="fixed">
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let pageCallNumber of pageCallNumbers; let i = index" size="6">
+        <ion-card (click)="makeCall(pageCallNumber.number)" class="ion-text-center ion-card-flex">
+          <ion-card-header class="ion-card-header">
+            <ion-card-title><h1>{{ pageCallNumber.number }}</h1></ion-card-title>
+            <ion-card-subtitle>{{ pageCallNumber.title }}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <div class="bar-color"></div>
+  <ion-toolbar color="primary">
+    <ion-thumbnail slot="start" class="img_thumbnail">
+      <ion-img class="img_thumbail_img_footer" [src]="appComponent.imgs.footer"></ion-img>
+    </ion-thumbnail>
+    <ion-thumbnail slot="start" class="img_thumbnail" style="width: 50%;">
+      <ion-img class="img_thumbail_img_footer" [src]="appComponent.imgs.logo"></ion-img>
+    </ion-thumbnail>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,104 @@
+<ion-header>
+  <div class="bar-color"></div>
+  <ion-toolbar color="primary">
+    <ion-thumbnail slot="start" class="img_thumbnail">
+      <ion-img class="img_thumbail_img_footer" [src]="appComponent.imgs.footer"></ion-img>
+    </ion-thumbnail>
+  </ion-toolbar>
+  <!-- <ion-progress-bar type="indeterminate" [hidden]="!status.isPaused"></ion-progress-bar> -->
+</ion-header>
+<!-- Muestra las alertas si no tiene acceso a la ubicación o a SMS -->
+<ion-content slot="fixed" [hidden]="status.location.auth && status.sms.auth">
+  <ion-grid>
+    <ion-row [hidden]="status.location.auth">
+      <ion-col class="ion-text-center">
+        <h1>
+          <ion-icon name="location-outline"></ion-icon>
+        </h1>
+        <h2>Usar tu ubicación</h2>
+        <p>Para poder ubicarte al enviar la alerta necesitamos acceso a tu ubicación</p>
+        <br>
+        <p>Esta aplicación utilizará tu ubicación en segundo plano para obtener acceso SOLO cuando la alerta esté activa</p>
+        <br>
+        <ion-button expand="block" (click)="checkLocationPermission()">Conceder acceso</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row [hidden]="!status.location.auth || status.sms.auth">
+      <ion-col class="ion-text-center">
+        <h1>
+          <ion-icon name="location-outline"></ion-icon>
+        </h1>
+        <h2>Enviar SMS</h2>
+        <p>Para una doble validación ademas de enviar la alerta por internet, se enviará solo UN Mensaje de texto vía SMS</p>
+        <br>
+        <p>De esta manera podremos asegurar que la alerta se guardará con mayor eficacia</p>
+        <br>
+        <ion-button expand="block" (click)="checkSMSPermission()">Conceder acceso</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-content slot="fixed" [hidden]="!(status.location.auth && status.sms.auth)">
+  <!-- Default Refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="refreshStatus($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid style="height: 100%; padding: 0;" [hidden]="status.prepared === null" #animationBackground>
+    <!-- Alerts -->
+    <ion-row style="position: absolute; width: 100%;" [hidden]="!status.alerting.active && (status.activation.active && (status.location.enabled && status.internet))">
+      <ion-col style="margin: 0; padding: 0;">
+        <ion-item class="ion-activated ion-text-center" [color]="status.backcolor" (click)="showStatusMessage()">
+          <ion-icon slot="start" [name]="status.icon"></ion-icon>
+          <ion-label style="white-space: pre;">{{ status.title }}</ion-label>
+          <ion-icon slot="end" [name]="status.icon"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <!-- Locate Button -->
+    <ion-row class="ion-align-items-center"
+      [style]="status.activation.active && (status.internet && status.location.enabled) ? 'height: 100%; vertical-align: middle;' :  'height: 100%; vertical-align: middle;'"
+      [hidden]="status.alerting.active">
+      <ion-col class="ion-margin-vertical" style="display: flex; justify-content: center;">
+        <ion-img class="button-locate {{ btn_rotated }}" [src]="btn_image" (click)="buttonLocateClick()"
+          (touchstart)="buttonLocatePress($event)" (touchend)="buttonLocatePress($event)"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center" [hidden]="!status.alerting.active"
+      style="height: 100%; vertical-align: middle;">
+      <!-- OK button -->
+      <ion-col size="12" style="display: flex; justify-content: center; margin-top: 15%;">
+        <ion-img class="button-locate rotate" style="width: 128px; height: 112px;" [src]="btn_image"
+          [hidden]="!status.alerting.active"></ion-img>
+      </ion-col>
+      <!-- Alerting status & send message -->
+      <ion-col>
+        <ion-item class="item ion-text-center" style="--background: transparent; max-height: 100px;">
+          <ion-label text-wrap>
+            <h2>{{ status.alerting.title }}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-card style="background-color: white; opacity: 1; z-index: 999;" [hidden]="!status.internet || status.alerting.sms_only">
+          <ion-item [hidden]="!status.alerting.active" [disabled]="!(status.internet)">
+            <ion-icon slot="start" [ios]="'chatbox-ellipses-outline'" [md]="'chatbox-ellipses-sharp'"></ion-icon>
+            <ion-textarea placeholder="Ingrese un mensaje para el COM" [(ngModel)]="textarea"></ion-textarea>
+          </ion-item>
+          <ion-item button color="primary" (click)="buttonSendMessage()"
+            [disabled]="status.isPaused || !(status.internet)" [hidden]="!status.alerting.active">
+            <ion-icon slot="start" [ios]="'send-outline'" [md]="'send-sharp'"></ion-icon>
+            Enviar mensaje
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar color="primary" *ngIf="isKeyboardHide">
+    <ion-thumbnail slot="start" class="img_thumbnail">
+      <ion-img class="img_thumbail_img_footer" [src]="appComponent.imgs.logo"></ion-img>
+    </ion-thumbnail>
+    <!-- <ion-thumbnail slot="start" class="img_thumbnail" style="width: 50%;">
+      <ion-img class="img_thumbail_img_footer" [src]="appComponent.imgs.logo"></ion-img>
+    </ion-thumbnail> -->
+  </ion-toolbar>
+</ion-footer>

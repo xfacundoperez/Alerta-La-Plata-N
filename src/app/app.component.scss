@@ -61,6 +61,10 @@ ion-menu.md ion-item ion-icon {
   color: #616e7e;
 }
 
+ion-item ion-label {
+  white-space: normal;
+}
+
 ion-menu.md ion-item ion-label {
   font-weight: 500;
 }

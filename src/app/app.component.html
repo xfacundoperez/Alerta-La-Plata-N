@@ -1,28 +1,41 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
+      <div class="bar-color"></div>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-thumbnail slot="start" class="img_thumbnail">
+            <ion-img class="img_thumbail_img_footer" [src]="imgs.footer"></ion-img>
+          </ion-thumbnail>
+        </ion-toolbar>
+      </ion-header>
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header>Inbox</ion-list-header>
-          <ion-note>hi@ionicframework.com</ion-note>
-
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none"
+              detail="false" [class.selected]="selectedIndex == i" [hidden]="p.hide">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
-
-        <ion-list id="labels-list">
-          <ion-list-header>Labels</ion-list-header>
-
-          <ion-item *ngFor="let label of labels" lines="none">
-            <ion-icon slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
-            <ion-label>{{ label }}</ion-label>
-          </ion-item>
+        <ion-list id="labels-list" *ngIf="pageCallNumbers.length">
+          <ion-item-group>
+            <ion-list-header>Numeros de emergencia</ion-list-header>
+            <ion-item *ngFor="let callNumber of pageCallNumbers" (click)="makeCall(callNumber.number)">
+              <ion-badge slot="start" style="--background: #7d2d9c">{{ callNumber.number }}</ion-badge>
+              <ion-label>{{ callNumber.title }}</ion-label>
+            </ion-item>
+          </ion-item-group>
         </ion-list>
       </ion-content>
+      <ion-footer>
+        <ion-toolbar color="primary">
+          <ion-thumbnail slot="start" class="img_thumbnail">
+            <ion-img class="img_thumbail_img_footer" [src]="imgs.logo"></ion-img>
+          </ion-thumbnail>
+        </ion-toolbar>
+      </ion-footer>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
