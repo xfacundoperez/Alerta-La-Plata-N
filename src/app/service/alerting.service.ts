@@ -15,7 +15,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 export class AlertingService {
   //#region VARS
   private API = {
-    base_url: 'https://alertaseg.com.ar:8089/api/alerta_gps',
+    base_url: 'https://190.191.112.207/api/alerta_gps',
     headers: {
       //"Content-Type": "application/x-www-form-urlencoded; charset=utf-8", 
       //'Accept': 'application/json, text/plain',
